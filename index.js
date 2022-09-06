@@ -21,7 +21,7 @@ Todo.belongsTo(User);
 User.hasMany(Todo);
 
 server.listen(PORT, () => {
-  console.log(`API todolist listen on PORT:${PORT}`);
+  console.log(`Server up on http://localhost:${PORT}`);
   sequelize.sync({ force: false }).then(() => {
     console.log("DB sync on models");
   });

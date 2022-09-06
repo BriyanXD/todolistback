@@ -10,6 +10,7 @@ const loginUser = async (req, res) => {
       where: { username },
       include: Todo,
     });
+    console.log(user);
     if (!user) return res.status(401).send();
     let passwordSave = await bcrypt.compare(password, user.password);
     if (!passwordSave) return res.status(401).send();
