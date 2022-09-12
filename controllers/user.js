@@ -6,10 +6,7 @@ const Todo = require("../models/todo");
 const loginUser = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const user = await User.findOne({
-      where: { username },
-      include: Todo,
-    });
+    const user = await User.findOne({ where: { username } });
     console.log(user);
     if (!user) return res.status(401).send();
     let passwordSave = await bcrypt.compare(password, user.password);
@@ -22,7 +19,7 @@ const loginUser = async (req, res) => {
       .setExpirationTime("1h")
       .sign(encoder.encode(process.env.JWT_PRIVATE_KEY));
 
-    res.send({ jwt, todos: user.todos });
+    res.send({ jwt, userId: user.id });
   } catch (error) {
     return res.status(401).send(error.message);
   }
@@ -45,8 +42,7 @@ const postUser = async (req, res) => {
       .setIssuedAt()
       .setExpirationTime("1h")
       .sign(encoder.encode(process.env.JWT_PRIVATE_KEY));
-
-    res.send({ jwt });
+    res.send({ jwt, userId: newUser[0].id });
   } catch (error) {
     res.status(400).send(error.message);
   }

@@ -6,15 +6,16 @@ const getLoginUser = async (req, res, next) => {
   try {
     if (!authorization) return res.status(401);
     const encoder = new TextEncoder();
+    const token = authorization.split(" ")[1];
     const jwtData = await jwtVerify(
-      authorization,
+      token,
       encoder.encode(process.env.JWT_PRIVATE_KEY)
     );
     const verifyUser = await User.findByPk(jwtData.payload.id);
-    if (!verifyUser) return res.status(401);
+    if (!verifyUser) return res.status(401).send();
     next();
   } catch (error) {
-    res.status(401).send(error.message);
+    res.status(401).send({ message: error.message });
   }
 };
 

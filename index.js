@@ -2,6 +2,7 @@ const express = require("express");
 const consoleRequest = require("morgan");
 const dotenv = require("dotenv");
 const sequelize = require("./db");
+const cors = require("cors");
 dotenv.config();
 
 const Todo = require("./models/todo");
@@ -12,6 +13,7 @@ const serverRoutes = require("./routes/index");
 const PORT = process.env.PORT || 3002;
 const server = express();
 
+server.use(cors());
 server.use(consoleRequest("dev"));
 server.use(express.json());
 server.use(express.text());
